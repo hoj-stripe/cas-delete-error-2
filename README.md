@@ -1,0 +1,2 @@
+- use Bazelisk
+- run `repro.sh`
