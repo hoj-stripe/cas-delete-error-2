@@ -1,7 +1,6 @@
 build --incompatible_strict_action_env
 
 # the new shiny thing
-build --experimental_remote_cache_eviction_retries 1
+build --experimental_remote_cache_eviction_retries 3
 
-# This breaks it :(
 build --remote_download_toplevel

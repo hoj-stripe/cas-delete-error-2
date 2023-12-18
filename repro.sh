@@ -68,7 +68,7 @@ printf "\n\n"
 echo "Removing the CAS object for file_1kb..."
 find "$CACHE_DIR/cas.v2/5f/" -name '5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef-1024*' -print -delete
 
-# Rerun to trigger the silent failure
+# Rerun to trigger the silent failure (Fixed with Bazel 7)
 printf "\n\n"
 
 bazel build //:file_1kb --remote_cache=grpc://localhost:9092
@@ -79,6 +79,24 @@ echo -n "Does the expected output exist? ... "
 if [[ -e bazel-bin/file_1kb ]]; then
     echo "Yes! ✅"
     rm -f bazel-bin/file_1kb
+else
+    echo "No! ❌"
+fi
+printf "\n\n"
+echo "Removing the CAS object for file_1kb..."
+find "$CACHE_DIR/cas.v2/5f/" -name '5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef-1024*' -print -delete
+
+# Rerun to trigger the obvious failure
+printf "\n\n"
+
+bazel build //:copy_file_1kb --remote_cache=grpc://localhost:9092
+bazel_exit=$?
+echo "Bazel exited with ${bazel_exit}"
+
+echo -n "Does the expected output exist? ... "
+if [[ -e bazel-bin/copied_file_1kb ]]; then
+    echo "Yes! ✅"
+    rm -f bazel-bin/copied_file_1kb
 else
     echo "No! ❌"
 fi
